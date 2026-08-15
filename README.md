@@ -94,3 +94,9 @@ See `GOOGLE_REVIEWS_SETUP.md` for activation steps.
 - Administration invoice Hours / Qty fields now use unrestricted decimal step entry.
 - Administrators can enter values such as 2, 2.5, 2.25, 1.76 or other decimal quantities without browser step validation errors.
 - Existing invoice calculations, GST, rates and totals remain unchanged.
+
+## Version 15 – Rowshan invoice reference correction
+
+- Invoice numbers now use the Rowshan `RMC-INV-` prefix throughout the website and administration.
+- Updated the public invoice lookup example to use `RMC-INV-...`.
+- Added `supabase/rowshan_invoice_prefix_v5.sql` to update any previously created invoice numbers in the current Rowshan database.
