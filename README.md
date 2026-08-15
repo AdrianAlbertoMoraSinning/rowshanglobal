@@ -80,3 +80,11 @@ See `GOOGLE_REVIEWS_SETUP.md` for activation steps.
 - Rewrote Home, Services, Rates, About and Contact copy with original Rowshan-specific customer-facing language.
 - Added `supabase/rowshan_content_v2.sql` to update an already-created Rowshan Supabase `services` table without changing prices or availability.
 - Frontend service cards also apply Rowshan content/image overrides while retaining live Supabase pricing and operational status.
+
+## Version 13 – Administrator password recovery hardening
+
+- Password recovery continues to redirect to `modules/agenda/admin-reset.html` on the deployed site.
+- Reset page now validates recovery tokens and displays clear expired/invalid-link messages.
+- Administration handles Supabase HTTP 429 rate limits with a user-friendly cooldown instead of repeated requests.
+- Successful password changes clear any old admin token before the next sign-in.
+- No Supabase secret/service-role key is included in the frontend.
