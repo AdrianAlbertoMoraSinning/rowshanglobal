@@ -88,3 +88,9 @@ See `GOOGLE_REVIEWS_SETUP.md` for activation steps.
 - Administration handles Supabase HTTP 429 rate limits with a user-friendly cooldown instead of repeated requests.
 - Successful password changes clear any old admin token before the next sign-in.
 - No Supabase secret/service-role key is included in the frontend.
+
+## Version 14 – Free invoice hours/quantity entry
+
+- Administration invoice Hours / Qty fields now use unrestricted decimal step entry.
+- Administrators can enter values such as 2, 2.5, 2.25, 1.76 or other decimal quantities without browser step validation errors.
+- Existing invoice calculations, GST, rates and totals remain unchanged.
