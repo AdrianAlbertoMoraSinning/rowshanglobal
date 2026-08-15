@@ -9,33 +9,81 @@ async function showDashboard(){loginSection.hidden=true;dash.hidden=false;$('adm
 async function start(){if(!RMCData.configured()){loginMsg.textContent='Supabase must be configured in supabase-config.js before Administration can be used.';return}if(await verify())showDashboard();else{sessionStorage.removeItem('rmc_admin_token');token=''}}
 loginForm.onsubmit=async e=>{e.preventDefault();msg(loginMsg,'Signing in…');try{const r=await RMCData.signIn($('adminEmail').value,$('adminPassword').value);token=r.access_token;sessionStorage.setItem('rmc_admin_token',token);if(!(await verify()))throw new Error('This account is not authorized as an Rowshan Moving Company administrator.');msg(loginMsg,'');showDashboard()}catch(err){msg(loginMsg,err.message||'Unable to sign in.');sessionStorage.removeItem('rmc_admin_token');token=''}};
 $('logoutBtn').onclick=()=>{sessionStorage.removeItem('rmc_admin_token');location.reload()};
-const forgotBtn=$('forgotPasswordBtn');
-let resetRequestLocked=false;
-if(forgotBtn)forgotBtn.onclick=async()=>{
-  const email=$('adminEmail').value.trim();
-  if(!email){msg(loginMsg,'Enter your administrator email first.');$('adminEmail').focus();return}
-  if(resetRequestLocked){msg(loginMsg,'A reset request was just sent. Please wait a few minutes before requesting another email.');return}
-  msg(loginMsg,'Sending secure password reset email…');
-  forgotBtn.disabled=true;
-  try{
-    const redirectTo=new URL('./admin-reset.html',location.href).href;
-    await RMCData.resetPassword(email,redirectTo);
-    resetRequestLocked=true;
-    msg(loginMsg,'Password reset email sent. Open the newest message from Supabase and follow the secure link. If it is not visible, check spam or junk mail.');
-    setTimeout(()=>{resetRequestLocked=false;forgotBtn.disabled=false},120000);
-  }catch(err){
-    const status=Number(err&&err.status||0);
-    const raw=String(err&&err.message||'');
-    if(status===429 || /429|rate|too many/i.test(raw)){
-      resetRequestLocked=true;
-      msg(loginMsg,'Too many reset requests were made recently. Please wait a few minutes, then request one new email.');
-      setTimeout(()=>{resetRequestLocked=false;forgotBtn.disabled=false},180000);
-    }else{
-      forgotBtn.disabled=false;
-      msg(loginMsg,raw||'Unable to send password reset email.');
+const forgotBtn = $('forgotPasswordBtn');
+let resetRequestLocked = false;
+
+if (forgotBtn) {
+  forgotBtn.onclick = async () => {
+    const email = $('adminEmail').value.trim();
+
+    if (!email) {
+      msg(loginMsg, 'Enter your administrator email first.');
+      $('adminEmail').focus();
+      return;
     }
-  }
-};
+
+    if (resetRequestLocked) {
+      msg(
+        loginMsg,
+        'A password reset was recently requested. Please wait before requesting another email.'
+      );
+      return;
+    }
+
+    msg(loginMsg, 'Sending secure password reset email…');
+    forgotBtn.disabled = true;
+
+    try {
+      const redirectTo =
+        `${window.location.origin}/modules/agenda/admin-reset.html`;
+
+      console.log('Password reset redirect:', redirectTo);
+
+      await RMCData.resetPassword(email, redirectTo);
+
+      resetRequestLocked = true;
+
+      msg(
+        loginMsg,
+        'Password reset email sent. Open only the newest email and use its secure Reset Password link.'
+      );
+
+      setTimeout(() => {
+        resetRequestLocked = false;
+        forgotBtn.disabled = false;
+      }, 120000);
+
+    } catch (err) {
+      const status = Number(err?.status || 0);
+      const raw = String(err?.message || '');
+
+      if (
+        status === 429 ||
+        /429|rate|too many/i.test(raw)
+      ) {
+        resetRequestLocked = true;
+
+        msg(
+          loginMsg,
+          'Too many password reset requests were made recently. Please wait a few minutes before trying again.'
+        );
+
+        setTimeout(() => {
+          resetRequestLocked = false;
+          forgotBtn.disabled = false;
+        }, 180000);
+
+      } else {
+        forgotBtn.disabled = false;
+
+        msg(
+          loginMsg,
+          raw || 'Unable to send password reset email.'
+        );
+      }
+    }
+  };
+}
 function openTab(name){document.querySelectorAll('.admin-tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===name));document.querySelectorAll('.admin-pane').forEach(x=>x.classList.remove('active'));const p=$('pane-'+name);if(p)p.classList.add('active')}
 document.querySelectorAll('.admin-tab').forEach(b=>b.onclick=()=>openTab(b.dataset.tab));
 
