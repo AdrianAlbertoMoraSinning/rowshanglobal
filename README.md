@@ -72,3 +72,11 @@ The demo card-entry simulator has been replaced by Stripe-hosted Checkout. Payme
 - Existing booking, invoices, Stripe Checkout, webhooks and Supabase flows are unchanged.
 
 See `GOOGLE_REVIEWS_SETUP.md` for activation steps.
+
+
+## Version 12 – Rowshan-specific visual/content refresh
+
+- Replaced inherited activity imagery with a dedicated Rowshan-branded image set.
+- Rewrote Home, Services, Rates, About and Contact copy with original Rowshan-specific customer-facing language.
+- Added `supabase/rowshan_content_v2.sql` to update an already-created Rowshan Supabase `services` table without changing prices or availability.
+- Frontend service cards also apply Rowshan content/image overrides while retaining live Supabase pricing and operational status.

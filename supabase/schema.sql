@@ -34,12 +34,12 @@ create table if not exists public.services (
 );
 
 insert into public.services(id,name,category,description,price,unit,minimum,image,active,sort_order) values
-('labour','1 Person Labour / Assembly','Labour','Loading help, furniture assembly, packing, organizing and on-site moving support.',50,'hour',2,'assets/rowshan-moving-sofa.jpg',true,10),
-('pickup','1 Mover + Pickup / Small Delivery','Delivery','Pickup truck service for Marketplace, IKEA, small moves, deliveries and light dump runs. Fuel included within Calgary.',75,'hour',2,'assets/rowshan-moving-truck-team.jpg',true,20),
-('truck2','2 Movers + Moving Box Truck','Moving','Professional two-person crew with box truck. Includes blankets, straps, shrink wrap, tape and dolly.',135,'hour',2,'assets/service-box-truck.webp',true,30),
-('helper','Additional Helper','Add-on','Extra labour for heavy or oversized items such as pianos, treadmills, pool tables and saunas.',50,'helper/hour',2,'assets/service-heavy-moving.webp',true,40),
-('junk','Dump Run / Junk Removal','Junk Removal','Pickup, loading and disposal support. Landfill charges are added from the official receipt.',75,'hour',2,'assets/service-junk-removal.webp',true,50),
-('packing','Packing & Unpacking Support','Packing','Careful packing, unpacking and organization assistance before or after your move.',50,'hour',2,'assets/service-packing.webp',true,60)
+('labour','Moving Labour & Furniture Setup','Labour','Flexible hands-on help for loading, unloading, furniture setup, room-to-room moves and on-site organization.',50,'hour',2,'assets/rowshan-furniture-setup.webp',true,10),
+('pickup','Mover + Pickup / Local Transport','Delivery','A practical option for smaller moves, furniture pickups, marketplace purchases and light local transport within Calgary.',75,'hour',2,'assets/rowshan-loading-crew.webp',true,20),
+('truck2','Two Movers + Box Truck','Moving','Two-person moving crew with a box truck and standard moving equipment for residential, office and larger local moves.',135,'hour',2,'assets/rowshan-box-truck-service.webp',true,30),
+('helper','Extra Mover / Heavy-Item Support','Add-on','Add another mover when stairs, bulky furniture or difficult-to-handle items require more manpower.',50,'helper/hour',2,'assets/rowshan-residential-move.webp',true,40),
+('junk','Clean-Out / Disposal Run','Junk Removal','Loading and transport of unwanted furniture, appliances and household items; disposal charges are added from the official receipt.',75,'hour',2,'assets/rowshan-junk-removal.webp',true,50),
+('packing','Packing, Unpacking & Move Prep','Packing','Extra assistance to box, label, protect, unpack and organize belongings before or after moving day.',50,'hour',2,'assets/rowshan-packing-support.webp',true,60)
 on conflict (id) do update set name=excluded.name,category=excluded.category,description=excluded.description,price=excluded.price,unit=excluded.unit,minimum=excluded.minimum,image=excluded.image,sort_order=excluded.sort_order;
 
 create table if not exists public.bookings (
@@ -192,7 +192,7 @@ begin
 
   select gst_rate into v_gst_rate from public.settings where id=1;
   v_gst=round(v_subtotal*(coalesce(v_gst_rate,5)/100),2); v_total=v_subtotal+v_gst;
-  v_ref='RB-'||to_char(p_service_date,'YYYYMMDD')||'-'||upper(substr(replace(gen_random_uuid()::text,'-',''),1,6));
+  v_ref='RMC-'||to_char(p_service_date,'YYYYMMDD')||'-'||upper(substr(replace(gen_random_uuid()::text,'-',''),1,6));
 
   begin
     insert into public.bookings(reference,first_name,last_name,phone,email,service_date,start_slot,origin,destination,details,subtotal,gst_amount,total_estimate)

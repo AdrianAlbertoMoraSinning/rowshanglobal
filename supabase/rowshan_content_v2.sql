@@ -1,0 +1,7 @@
+-- Rowshan Moving Company content refresh v2
+update public.services set name='Moving Labour & Furniture Setup', description='Flexible hands-on help for loading, unloading, furniture setup, room-to-room moves and on-site organization.', image='assets/rowshan-furniture-setup.webp' where id='labour';
+update public.services set name='Mover + Pickup / Local Transport', description='A practical option for smaller moves, furniture pickups, marketplace purchases and light local transport within Calgary.', image='assets/rowshan-loading-crew.webp' where id='pickup';
+update public.services set name='Two Movers + Box Truck', description='Two-person moving crew with a box truck and standard moving equipment for residential, office and larger local moves.', image='assets/rowshan-box-truck-service.webp' where id='truck2';
+update public.services set name='Extra Mover / Heavy-Item Support', description='Add another mover when stairs, bulky furniture or difficult-to-handle items require more manpower.', image='assets/rowshan-residential-move.webp' where id='helper';
+update public.services set name='Clean-Out / Disposal Run', description='Loading and transport of unwanted furniture, appliances and household items; disposal charges are added from the official receipt.', image='assets/rowshan-junk-removal.webp' where id='junk';
+update public.services set name='Packing, Unpacking & Move Prep', description='Extra assistance to box, label, protect, unpack and organize belongings before or after moving day.', image='assets/rowshan-packing-support.webp' where id='packing';
