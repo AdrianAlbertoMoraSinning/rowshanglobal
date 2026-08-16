@@ -18,7 +18,7 @@ if(forgotBtn)forgotBtn.onclick=async()=>{
   msg(loginMsg,'Sending secure password reset email…');
   forgotBtn.disabled=true;
   try{
-    const redirectTo=`${window.location.origin}/modules/agenda/admin-reset.html`;
+    const redirectTo=new URL('./admin-reset.html',location.href).href;
     await RMCData.resetPassword(email,redirectTo);
     resetRequestLocked=true;
     msg(loginMsg,'Password reset email sent. Open the newest message from Supabase and follow the secure link. If it is not visible, check spam or junk mail.');
