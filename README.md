@@ -100,3 +100,20 @@ See `GOOGLE_REVIEWS_SETUP.md` for activation steps.
 - Invoice numbers now use the Rowshan `RMC-INV-` prefix throughout the website and administration.
 - Updated the public invoice lookup example to use `RMC-INV-...`.
 - Added `supabase/rowshan_invoice_prefix_v5.sql` to update any previously created invoice numbers in the current Rowshan database.
+
+
+## Client Review v6 (August 2026)
+- Main menu updated to Home | Services | Pricing | Book Now / Get a Quote | Reviews | About Us | Contact Us | Gallery.
+- Home service cards expanded to the client-approved 12 services.
+- Public one-month availability calendar added; it displays only date-level availability and no customer information.
+- Services directory reorganized to the client-approved categories.
+- Pricing page updated to the new $60–$200/hour package matrix and client pricing notes.
+- Booking page now separates standard bookable packages from specialty quote services.
+- Google and Taskrabbit review access added.
+- About Us replaced with the client-approved R.M.C. content.
+- Contact address updated to 1507–2010 Ulster Road NW, Calgary, AB, Canada T2N 4C2; Facebook, service-area map, Call Now/Get a Quote, and Netlify contact form added.
+- Gallery page added as a placeholder until approved gallery media is supplied.
+- Basic Netlify security headers added.
+
+### Required Supabase pricing update
+Run `supabase/rowshan_client_review_v6.sql` once in the Supabase SQL Editor. This synchronizes the booking database with the new client-approved pricing packages. Existing historical bookings and invoice items are preserved.

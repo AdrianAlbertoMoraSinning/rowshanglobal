@@ -1,0 +1,1 @@
+(function(){const sel=document.getElementById('contactService');if(!sel)return;const requested=new URLSearchParams(location.search).get('service');if(requested){const option=[...sel.options].find(o=>o.value.toLowerCase()===requested.toLowerCase());if(option)sel.value=option.value;}})();

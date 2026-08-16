@@ -34,13 +34,16 @@ create table if not exists public.services (
 );
 
 insert into public.services(id,name,category,description,price,unit,minimum,image,active,sort_order) values
-('labour','Moving Labour & Furniture Setup','Labour','Flexible hands-on help for loading, unloading, furniture setup, room-to-room moves and on-site organization.',50,'hour',2,'assets/rowshan-furniture-setup.webp',true,10),
-('pickup','Mover + Pickup / Local Transport','Delivery','A practical option for smaller moves, furniture pickups, marketplace purchases and light local transport within Calgary.',75,'hour',2,'assets/rowshan-loading-crew.webp',true,20),
-('truck2','Two Movers + Box Truck','Moving','Two-person moving crew with a box truck and standard moving equipment for residential, office and larger local moves.',135,'hour',2,'assets/rowshan-box-truck-service.webp',true,30),
-('helper','Extra Mover / Heavy-Item Support','Add-on','Add another mover when stairs, bulky furniture or difficult-to-handle items require more manpower.',50,'helper/hour',2,'assets/rowshan-residential-move.webp',true,40),
-('junk','Clean-Out / Disposal Run','Junk Removal','Loading and transport of unwanted furniture, appliances and household items; disposal charges are added from the official receipt.',75,'hour',2,'assets/rowshan-junk-removal.webp',true,50),
-('packing','Packing, Unpacking & Move Prep','Packing','Extra assistance to box, label, protect, unpack and organize belongings before or after moving day.',50,'hour',2,'assets/rowshan-packing-support.webp',true,60)
-on conflict (id) do update set name=excluded.name,category=excluded.category,description=excluded.description,price=excluded.price,unit=excluded.unit,minimum=excluded.minimum,image=excluded.image,sort_order=excluded.sort_order;
+('labour1','Labour Only — 1 Mover','Standard Package','One professional mover for labour-only moving help. No vehicle included.',60,'hour',2,'assets/rowshan-loading-crew.webp',true,10),
+('pickup1','Small Move — 1 Mover + Pickup Truck','Standard Package','One mover with a pickup truck for smaller moves, deliveries and local transport.',70,'hour',2,'assets/rowshan-loading-crew.webp',true,20),
+('pickup2','Small Move — 2 Movers + Pickup Truck','Standard Package','Two movers with a pickup truck for small moves that need additional labour.',110,'hour',2,'assets/rowshan-loading-crew.webp',true,30),
+('box10_1','Standard Move — 1 Mover + 10-Foot Box Truck','Standard Package','One mover with a 10-foot box truck for standard local moving needs.',110,'hour',2,'assets/rowshan-box-truck-service.webp',true,40),
+('box10_2','Standard Move — 2 Movers + 10-Foot Box Truck','Standard Package','Two movers with a 10-foot box truck for efficient residential and small-business moves.',150,'hour',2,'assets/rowshan-box-truck-service.webp',true,50),
+('box15_1','Large Move — 1 Mover + 15-Foot Box Truck','Standard Package','One mover with a 15-foot box truck for larger loads and local moves.',120,'hour',2,'assets/rowshan-box-truck-service.webp',true,60),
+('box15_2','Large Move — 2 Movers + 15-Foot Box Truck','Standard Package','Two movers with a 15-foot box truck for larger residential or commercial moves.',170,'hour',2,'assets/rowshan-box-truck-service.webp',true,70),
+('box20_2','Larger Move — 2 Movers + 20–26-Foot Box Truck','Standard Package','Two movers with a larger 20–26-foot box truck for high-volume moving jobs.',200,'hour',2,'assets/rowshan-box-truck-service.webp',true,80),
+('helper','Additional Helper — 1 Extra Mover','Add-on','Add one extra mover to any standard package. The same booking minimum applies.',60,'hour',2,'assets/rowshan-residential-move.webp',true,90)
+on conflict (id) do update set name=excluded.name,category=excluded.category,description=excluded.description,price=excluded.price,unit=excluded.unit,minimum=excluded.minimum,image=excluded.image,sort_order=excluded.sort_order,active=excluded.active,updated_at=now();
 
 create table if not exists public.bookings (
   id uuid primary key default gen_random_uuid(),
