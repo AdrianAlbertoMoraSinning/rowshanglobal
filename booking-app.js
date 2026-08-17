@@ -7,7 +7,7 @@ const defaults=[
 {id:'junk',name:'Clean-Out / Disposal Run',category:'Junk Removal',description:'Loading and transport of unwanted furniture, appliances and household items; disposal charges are added from the official receipt.',price:75,unit:'hour',minimum:2,image:'assets/rowshan-junk-removal.webp',active:true,sort_order:50},
 {id:'packing',name:'Packing, Unpacking & Move Prep',category:'Packing',description:'Extra assistance to box, label, protect, unpack and organize belongings before or after moving day.',price:50,unit:'hour',minimum:2,image:'assets/rowshan-packing-support.webp',active:true,sort_order:60}
 ];
-let servicesCache=null,settingsCache={gst_rate:5,business_hours:'8:00 AM–8:00 PM'};
+let servicesCache=null,settingsCache={gst_rate:0,business_hours:'8:00 AM–8:00 PM'};
 const rowshanContent=Object.fromEntries(defaults.map(s=>[s.id,{
   name:s.name,category:s.category,description:s.description,image:s.image
 }]));
@@ -21,7 +21,7 @@ async function getSettings(){if(!RMCData?.configured())return settingsCache;try{
 async function getServices({includeInactive=false}={}){if(servicesCache&&!includeInactive)return servicesCache; if(!RMCData?.configured())return defaults.filter(x=>includeInactive||x.active);try{const q=`select=id,name,category,description,price,unit,minimum,image,active,sort_order&order=sort_order.asc${includeInactive?'':'&active=eq.true'}`;const rows=await RMCData.table.get('services',q);const branded=applyRowshanContent(rows);if(!includeInactive)servicesCache=branded;return branded}catch(e){console.warn('Using static service fallback',e);return defaults.filter(x=>includeInactive||x.active)}}
 async function getReviews(){if(!RMCData?.configured())return [];try{return await RMCData.table.get('reviews','select=id,author,rating,review_text,review_date,source,source_url,visible,sort_order&visible=eq.true&order=sort_order.asc,review_date.desc')}catch(e){console.warn(e);return []}}
 async function getGoogleReviews(){try{const res=await fetch('/.netlify/functions/google-reviews',{headers:{Accept:'application/json'}});const text=await res.text();if(!text)return null;const data=JSON.parse(text);if(!res.ok)throw new Error(data.error||`Google reviews request failed (${res.status})`);return data}catch(e){console.warn('Google reviews fallback active',e);return null}}
-function totals(items,gst=Number(settingsCache.gst_rate||5)){const subtotal=items.reduce((s,i)=>s+(Number(i.price)*Number(i.qty)),0),gstAmount=subtotal*gst/100;return{subtotal,gst:gstAmount,total:subtotal+gstAmount,gstRate:gst}}
+function totals(items){const subtotal=items.reduce((sum,i)=>sum+(Number(i.price)*Number(i.qty)),0);return{subtotal,gst:0,total:subtotal,gstRate:0}}
 async function renderReviews(){
   const el=document.getElementById('reviewGrid');if(!el)return;
   const summary=document.getElementById('googleReviewSummary'),countEl=document.getElementById('googleReviewCount'),ratingEl=document.getElementById('googleReviewRating'),statusEl=document.getElementById('googleReviewStatus');
