@@ -22,9 +22,49 @@
   }
   async function me(token){return request('/auth/v1/user',{token});}
   async function resetPassword(email,redirectTo){
-    const path=`/auth/v1/recover${redirectTo?`?redirect_to=${encodeURIComponent(redirectTo)}`:''}`;
-    return request(path,{method:'POST',body:{email}});
+    if(!configured()) throw new Error('SUPABASE_NOT_CONFIGURED');
+
+    const url=new URL(`${cfg.url}/auth/v1/recover`);
+    if(redirectTo) url.searchParams.set('redirect_to',redirectTo);
+
+    const res=await fetch(url.toString(),{
+      method:'POST',
+      headers:{
+        apikey:cfg.anonKey,
+        Authorization:`Bearer ${cfg.anonKey}`,
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({email})
+    });
+
+    let payload=null;
+    const text=await res.text();
+    if(text){
+      try{payload=JSON.parse(text)}
+      catch{payload=text}
+    }
+
+    if(!res.ok){
+      const err=new Error(
+        payload?.message ||
+        payload?.error_description ||
+        payload?.error ||
+        `Password reset request failed (${res.status})`
+      );
+      err.status=res.status;
+      err.payload=payload;
+      throw err;
+    }
+
+    return payload;
   }
-  async function updatePassword(token,password){return request('/auth/v1/user',{method:'PUT',body:{password},token});}
+  async function updatePassword(token,password){
+    if(!token) throw new Error('Missing recovery session token.');
+    return request('/auth/v1/user',{
+      method:'PUT',
+      body:{password},
+      token
+    });
+  }
   window.RMCData={configured,request,rpc,table,signIn,me,resetPassword,updatePassword,config:cfg};
 })();
